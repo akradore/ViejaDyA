@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="product_report">
+        <t t-call="web.basic_layout">
+            <t t-set="total_inv" t-value="0"/>
+            <t t-foreach="docs" t-as="o">
+                <div class="page">
+                    <style>
+                        .text_center{text-align: center;}
+                        .big_font{font-size:18px;}
+                        .margin_header{padding-top:30px;}
+                        .border{border-bottom:0}
+                        .font_bold{font-weight: bold;}}
+                    </style>
+                    <br/>
+                    <div style="text-align: center;">
+                        <span style="font-size: 22px;"><strong>Top <span t-esc="docs.display_product"/> Selling Products between <span t-esc="docs.start_date"/> to <span t-esc="docs.end_date"/></strong></span>
+                    </div><br/>
+                    <div class="container mb16" style="border: 1px solid black;">
+                        <div class="row mt16 mb16 text_center">
+                            <div class="col-xs-6">
+                                <th class="big_font"><strong>Company</strong></th>
+                            </div>
+                            <div class="col-xs-6">
+                                <th class="big_font"><strong>Warehouse</strong></th>
+                            </div>
+                        </div>
+                        <div class="row mt8 mb16 text_center">
+                            <div class="col-xs-6">
+                                <t t-if="docs.company_id"><span t-esc="docs.company_id.name"/><br/></t>
+                            </div>
+                            <div class="col-xs-6">
+                                <t t-foreach="docs.warehouse_id" t-as="warehouse_id"><span t-esc="warehouse_id.name"/><br/></t>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Products</th>
+                                <th class="text-right">Total Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="index" t-value="1"/>
+                            <tr t-foreach="products" t-as="p">
+                                <td>
+                                    <span t-esc="index"/>
+                                    <t t-set="index" t-value="index+1"/>
+                                </td>
+                                <td><span t-esc="p['name']" /></td>
+                                <td class="text-right" style="white-space: text-nowrap;">
+                                    <span t-esc="p['qty']" />
+                                    <t t-set="total_inv" t-value="total_inv+p['qty']"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tr>
+                            <td class="font_bold text-right" colspan="3">Total Selling Quantity: <span t-esc="total_inv"/></td>
+                        </tr>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

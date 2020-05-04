@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<report id="print_dev_stock_inventory_ageing_report"
+			model="inventory.age.wizard"
+			string="Inventory Ageing"
+			report_type="qweb-pdf"
+			name="dev_inventory_ageing_report.dev_inv_ageing_temp"
+			file="dev_inventory_ageing_report.dev_inv_ageing_temp"
+			/>
+
+		<record id="paperformat_dev_inv_ageing" model="report.paperformat">
+            <field name="name">Inventory Ageing A4</field>
+            <field name="default" eval="True" />
+            <field name="format">custom</field>
+            <field name="page_height">297</field>
+            <field name="page_width">210</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">05</field>
+            <field name="margin_bottom">15</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">05</field>
+            <field name="dpi">90</field>
+        </record>
+
+		<record id="dev_inventory_ageing_report.print_dev_stock_inventory_ageing_report" model="ir.actions.report">
+            <field name="paperformat_id" ref="dev_inventory_ageing_report.paperformat_dev_inv_ageing" />
+        </record>
+
+	<template id="external_inv_ageing_report_layout">
+        <div class="header">
+        </div>
+
+         <div class="article o_report_layout_standard">
+            <t t-raw="0" />
+        </div>
+
+        <div class="footer">
+            <div class="text-center">
+                <div class="text-right" style="border-top: 1px solid white;">
+                      <ul class="list-inline">
+                        <li>Page:</li>
+                        <li>
+                          <span class="page"/>
+                        </li>
+                        <li>/</li>
+                        <li>
+                          <span class="topage"/>
+                        </li>
+                      </ul>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="external_inv_ageing_report_header">
+        <!-- Multicompany -->
+        <t t-if="not o and doc">
+            <t t-set="o" t-value="doc"/>
+        </t>
+
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id.sudo()"/>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"/>
+        </t>
+        <t t-call="dev_inventory_ageing_report.external_inv_ageing_report_layout"><t t-raw="0"/></t>
+    </template>
+    
+</odoo>

@@ -1,0 +1,86 @@
+<?xml version="1.0" ?>
+<odoo>
+    <!-- This wizard view use for the wiz.export.zip... -->
+    <record id="view_wiz_export_zip" model="ir.ui.view">
+        <field name="name">view.wiz.export.zip</field>
+        <field name="model">wiz.export.zip</field>
+        <field name="arch" type="xml">
+            <form string="Export File">
+                <group>
+                    <field name="name" invisible="1"/>
+                    <field name="file" readonly="1"
+                        filename="name" string="Zip File"/>
+                </group>
+                <footer>
+                    <button string="Close" class="oe_highlight" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- This wizard form view wiz.export.image -->
+    <record id="view_wizard_export_image" model="ir.ui.view">
+        <field name="name">view.wizard.export.image</field>
+        <field name="model">wiz.export.image</field>
+        <field name="arch" type="xml">
+            <form string="Export Product Image">
+                <group>
+                    <group>
+                        <field name="zip_name" required="1"/>
+                        <field name="location" required="1" invisible="1"/>
+                    </group>
+                    <group>
+                        <field name="img_size"/>
+                    </group>
+                </group>
+                <separator string="Products"/>
+                <field name="product_temp_ids" nolabel="1" invisible="context.get('product_product',False)">
+                    <tree>
+                        <field name="default_code"/>
+                        <field name="name"/>
+                        <field name="categ_id"/>
+                        <field name="type"/>
+                    </tree>
+                </field>
+                <field name="product_ids" nolabel="1" invisible="context.get('product_template',False)">
+                    <tree>
+                        <field name="default_code"/>
+                        <field name="name"/>
+                        <field name="categ_id"/>
+                        <field name="type"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button name="export_image" string="Export" type="object" default_focus="1" class="oe_highlight" />
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for the product.template -->
+    <act_window
+            id="action_wiz_export_image"
+            name="Export Image"
+            res_model="wiz.export.image"
+            src_model="product.template"
+            view_mode="form,tree"
+            view_type="form"
+            multi="True"
+            target="new"
+            key2="client_action_multi"
+            context="{'product_template': True}"/>
+
+    <!-- Action for the product.product -->
+    <act_window
+            id="action_wiz_export_product_image"
+            name="Export Images"
+            res_model="wiz.export.image"
+            src_model="product.product"
+            view_mode="form,tree"
+            view_type="form"
+            multi="True"
+            target="new"
+            key2="client_action_multi"
+            context="{'product_product': True}"/>
+</odoo>

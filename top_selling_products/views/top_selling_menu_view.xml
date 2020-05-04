@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_top_selling_products" name="Top Selling Product" action="action_top_selling_product" parent="stock.menu_warehouse_report" sequence="1"/>
+</odoo>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="sh_BoM_structure_product_img" inherit_id="mrp.mrp_bom_cost_report">
+			<xpath expr="//div[hasclass('page')]//table" position="before">
+				<div class="col-md-2" style="margin:0px; padding:0px;">
+					<span t-field="line['bom'].product_tmpl_id.image_medium" t-options='{"widget": "image"}'/>
+				</div>
+			</xpath>
+		</template>
+	</data>
+</odoo>

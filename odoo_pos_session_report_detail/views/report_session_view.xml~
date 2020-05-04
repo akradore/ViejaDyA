@@ -1,0 +1,140 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+        <template id="template_report_pos_session_view">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.internal_layout">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            <div class="row text-center">
+                                <h3><span t-field="o.name"/></h3>
+                            </div>
+                            <div class="row">
+                                <table width="100%" class="table table-condensed">
+                                    <tr>
+                                        <td><strong>Responsible:</strong></td>
+                                        <td><strong>Opening Date:</strong></td>
+                                        <td><strong>Closing Date:</strong></td>
+                                        <td><strong>Status:</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span t-field="o.user_id.name"/></td>
+                                        <td><span t-field="o.start_at"/></td>
+                                        <td><span t-field="o.stop_at"/></td>
+                                        <td><span t-field="o.state"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="row" style="border-bottom:1px solid black;">
+                                 <p><strong>Opening Cashbox</strong></p>
+                            </div>
+                            <t t-foreach="o.statement_ids" t-as="statement">
+                                <div class="row" t-if="statement.cashbox_start_id.cashbox_lines_ids">
+                                    <table class="table table-condensed">
+                                        <tr t-foreach="statement.cashbox_start_id.cashbox_lines_ids" t-as="cline">
+                                            <td><span t-field="cline.coin_value"/></td>
+                                            <td>x</td>
+                                            <td><span t-field="cline.number"/></td>
+                                            <td>=</td>
+                                            <td><span t-field="cline.subtotal" t-field-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </t>
+                            <div class="row" style="border-bottom:1px solid black;">
+                                <p><strong>Closing Cashbox</strong></p>
+                            </div>
+                            <t t-foreach="o.statement_ids" t-as="statement">
+                                <div class="row" t-if="statement.cashbox_end_id.cashbox_lines_ids">
+                                    <table class="table table-condensed">
+                                        <tr t-foreach="statement.cashbox_end_id.cashbox_lines_ids" t-as="cline">
+                                            <td><span t-field="cline.coin_value"/></td>
+                                            <td>x</td>
+                                            <td><span t-field="cline.number"/></td>
+                                            <td>=</td>
+                                            <td><span t-field="cline.subtotal" t-field-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </t>
+                            <div class="row"><strong><p>Point of Sale Orders</p></strong></div>
+                            <div class="row">
+                                <table class="table table-condensed">
+                                    <tr>
+                                       <th style="border-bottom:1px solid black;">Order Reference</th>
+                                       <th style="border-bottom:1px solid black;">Order Date</th>
+                                       <th style="border-bottom:1px solid black;">Customer</th>
+                                       <th style="border-bottom:1px solid black;">Picking Name</th>
+                                       <th class="text-right" style="border-bottom:1px solid black;">Tax Amount</th>
+                                       <th class="text-right" style="border-bottom:1px solid black;">Total Amount</th>
+                                    </tr>
+                                    <tr t-foreach="o.order_ids" t-as="order">
+                                        <td><span t-field="order.name"/></td>
+                                        <td><span t-field="order.date_order"/></td>
+                                        <td><span t-field="order.partner_id.name"/></td>
+                                        <td><span t-field="order.session_id.name"/></td>
+                                        <td class="text-right"><span t-field="order.amount_tax" t-field-options='{"widget": "monetary", "display_currency": order.company_id.currency_id}'/></td>
+                                        <td class="text-right"><span t-field="order.amount_total" t-field-options='{"widget": "monetary", "display_currency": order.company_id.currency_id}'/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <t t-foreach="o.statement_ids" t-as="statement">
+                                <h3><span t-field="statement.journal_id.name"/></h3>
+                                <div class="row">
+                                    <table class="table table-condensed">
+                                        <tr>
+                                            <td style="border-bottom:1px solid black;"><strong>Description</strong></td>
+                                            <td style="border-bottom:1px solid black;" class="text-right"><strong>Amount</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Opening Cash Balance</td>
+                                            <td class="text-right"><span t-field="statement.balance_start" t-options='{"widget": "monetary", "display_currency": statement.currency_id}'/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Sales</td>
+                                            <td class="text-right">
+                                                <span t-field="statement.total_entry_encoding" t-options='{"widget": "monetary", "display_currency": statement.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ending Closing Balance</td>
+                                            <td class="text-right"><span t-field="statement.balance_end_real"  t-options='{"widget": "monetary", "display_currency": statement.currency_id}'/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Theoretical Closing Balance</td>
+                                            <td class="text-right"><span t-esc="statement.balance_start + statement.total_entry_encoding"  t-options='{"widget": "monetary", "display_currency": statement.currency_id}'/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Difference</td>
+                                            <td class="text-right"><span t-field="statement.difference"  t-options='{"widget": "monetary", "display_currency": statement.currency_id}'/></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                              </t>
+                            <div t-if="cashbox_lines_ids" class="row" >
+                                <p>Withdrawal Amount: <span t-esc="sum([s.subtotal for s in cashbox_lines_ids])" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></p>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <strong>Responsible Person: </strong><span t-field="o.user_id"/>
+                                </div>
+                                <div class="col-xs-6">
+                                    <strong>Signature:___________________________</strong>
+                                </div>
+                           </div><br/><br/>
+                           <div class="row">
+                                <div class="col-xs-6">
+                                    <strong>Authorized Person: </strong>
+                                </div>
+                                <div class="col-xs-6">
+                                    <strong>Signature:___________________________</strong>
+                                </div>
+                            </div>
+                      </div>
+                    </t>
+                </t>
+                </t>
+        </template>
+    </data>
+</odoo>

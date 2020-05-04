@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report 
+            id="action_product_reports"
+            string="Products Report"
+            model="report.top_selling_products.product_report" 
+            report_type="qweb-pdf"
+            file="top_selling_products.product_report" 
+            name="top_selling_products.product_report" 
+        />
+        <record id="paperformat_top_selling_product" model="report.paperformat">
+            <field name="name">A4 Top Selling Products</field>
+            <field name="default" eval="True" />
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">8</field>
+            <field name="margin_right">8</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">5</field>
+            <field name="dpi">90</field>
+            <field name="report_ids" eval="[(6,0,[ref('top_selling_products.action_product_reports')])]"/>
+        </record>
+    </data>
+</odoo>

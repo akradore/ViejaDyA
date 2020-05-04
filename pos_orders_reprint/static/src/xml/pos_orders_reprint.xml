@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <templates id="pos_orders_reprint_template" inherit_id="point_of_sale.template" xml:space="preserve">
+
+
+
+ <!-- SeeAllOrdersScreenWidget -->
+    <t t-extend="SeeAllOrdersScreenWidget">
+        <!-- -->
+        <t t-jquery="tr" t-operation="append">
+        	<th>Receipt</th>
+        </t>
+
+    </t>
+    
+
+ <!-- OrdersLine -->
+    <t t-extend="OrdersLine">
+        <!-- -->
+        <t t-jquery="tr" t-operation="append">
+			 <td>
+		        <button class="print-order" t-att-id='order.id' style="cursor: pointer; color: #fff; background-color: #7F82AC;"><i class="fa fa-print"></i> Print</button>
+		    </td>
+        </t>
+
+    </t>
+
+
+   <t t-name="ReceiptScreenWidgetNew">
+        <div class='receipt-screen screen'>
+            <div class='screen-content'>
+                <div class='top-content'>
+                    <span class='button back'>
+                        <i class='fa fa-angle-double-left'></i>
+                        back
+                    </span>
+                </div>
+                <div class="centered-content">
+                    <div class="button print ayaz">
+                        <i class='fa fa-print'></i> Print Receipt
+                    </div>
+                    <div class="pos-receipt-container">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+
+
+    <t t-name="PosTicket1">
+        <div class="pos-sale-ticket">
+			<div class="pos-center-align"><t t-esc="order.date_order"/> <t t-esc="order.pos_reference"/></div>
+            <br />
+            <t t-esc="widget.pos.company.name"/><br />
+            <div class="receipt-phone">
+                Phone: <t t-esc="widget.pos.company.phone || ''"/><br />
+            </div>
+            <div class="receipt-user">
+                User: <t t-esc="widget.pos.get_cashier().name"/><br />
+            </div>
+            <br />
+            <!--<t t-if="receipt.header">
+                <div style='text-align:center'>
+                    <t t-esc="receipt.header" />
+                </div>
+                <br />
+            </t>-->
+
+            <table class='receipt-orderlines'>
+                <colgroup>
+                    <col width='50%' />
+                    <col width='25%' />
+                    <col width='25%' />
+                </colgroup>
+                 <tr t-foreach="orderlines" t-as="orderline">
+                    <td>
+                        <t t-esc="orderline.product_id"/>
+                         <t t-if="orderline.discount > 0">
+                            <div class="pos-disc-font">
+                                With a <t t-esc="orderline.discount"/>% discount
+                            </div>
+                        </t>
+                    </td>
+                    <td class="pos-right-align">
+                        <t t-esc="orderline.qty"/>
+                    </td>
+                    <td class="pos-right-align">
+                        <t t-esc="widget.format_currency(orderline.price_unit)"/>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <table class='receipt-total'>
+                <tr>
+                    <td>Subtotal:</td>
+                    <td class="pos-right-align">
+                        <t t-esc="widget.format_currency(subtotal)" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tax:</td>
+                    <td class="pos-right-align">
+                        <t t-esc="widget.format_currency(tax)" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Discount:</td>
+                    <td class="pos-right-align">
+                        <t t-esc="widget.format_currency(discount_total)"/>
+                    </td>
+                </tr>
+                <tr class="emph">
+                    <td>Total:</td>
+                    <td class="pos-right-align">
+                        <t t-esc="widget.format_currency(order.amount_total)"/>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <table class='receipt-paymentlines'>
+                <t t-foreach="paymentlines" t-as="line">
+                  <tr>
+                      <td>
+                          <t t-esc="line.name"/>
+                      </td>
+                      <td class="pos-right-align">
+                          <t t-esc="widget.format_currency(line.amount)"/>
+                      </td>
+                  </tr>
+                </t>
+            </table>
+            <br />
+            <table class='receipt-change'>
+                <tr><td>Change:</td><td class="pos-right-align">
+                    <t t-esc="widget.format_currency(change)"/>
+                    </td></tr>
+            </table>
+            <t t-if="widget.pos.config.show_barcode">
+                <div>
+                    <img t-if="barcode_img" t-att-src="'data:image/png;base64,'+ barcode_img" style="max-height: 130px;margin-left: 30px;margin-top: 20px;"/>
+                </div>
+            </t>
+        </div>
+    </t>
+
+
+
+
+
+  	</templates>
+
+

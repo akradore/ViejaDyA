@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<record id="view_attribute_wise_stock" model="ir.ui.view">
+			<field name="name">Attribute Wise Stock</field>
+			<field name="model">attribute.wise.stock</field>
+			<field name="arch" type="xml">
+				<form string="Attribute Wise Stock">
+					<group>
+						<field name="location_ids" widget="selection" />
+						<div>(If you do not select any location it will take all stock location)</div>
+					</group>
+					<group string="Product Categories">
+						<field name="product_category_ids" nolabel="1">
+							<tree string="Categories">
+								<field name="name" />
+							</tree>
+						</field>
+					</group>
+					<group string="Product Templates">
+                        <div colspan="4">(If you do not select any template it will take all product templates)</div>
+						<field name="product_template_ids" nolabel="1">
+							<tree string="Templates">
+								<field name="name" />
+							</tree>
+						</field>
+					</group>
+					<group />
+					<footer>
+						<button name="print_report" string="Export" type="object"
+							class="oe_highlight" />
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_attribute_wise_stock">
+			<field name="name">Attribute Wise Stock</field>
+			<field name="res_model">attribute.wise.stock</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="view_attribute_wise_stock" />
+			<field name="target">new</field>
+		</record>
+
+		<menuitem id="menu_stock_internal_reports" name="Stock Reports"
+			parent="stock.menu_stock_root" sequence="6" />
+		<menuitem action="action_attribute_wise_stock" id="menu_attribute_wise_stock"
+			parent="menu_stock_internal_reports" sequence="1" />
+
+		<record id="view_attribute_report_export" model="ir.ui.view">
+			<field name="name">attribute_report_export</field>
+			<field name="model">attribute.report.export</field>
+			<field name="arch" type="xml">
+				<form string="Attribute Wise Export">
+					<h1>
+						<field name="file" filename="fname" />
+						<field name="fname" invisible="1" />
+					</h1>
+					<footer>
+						<button string="_Close" class="oe_highlight" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+	</data>
+</openerp>

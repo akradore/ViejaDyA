@@ -1,0 +1,16 @@
+Version info
+
+11.0.0.4 ==> We are using 2 different currencies, USD and NPR(Nepalese Rupees). The problem we have found is that its not considering the currency while updating credit limit.
+
+11.0.0.5 ==> __logger issue solve.
+
+11.0.0.6 ==> single and multi currency issue solve.
+
+11.0.0.7 ==> check the "balance credit amount" in pos order credit payment history tab in customer.. its not updating properly.
+
+=> 11-04-2019 - 11.0.0.8 : Create index file according to new formate, Improve manifest file. 
+
+11.0.0.9 ==> check the "balance credit amount" in pos order credit payment history tab in customer.. its not updating properly.
+
+11.0.0.10
+	access rights improved for transient model

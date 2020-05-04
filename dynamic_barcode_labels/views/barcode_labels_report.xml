@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="dynamic_barcode_labels_layout">
+        <!-- Multicompany -->
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id" />
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company" />
+        </t>
+        <div class="article">
+          <t t-raw="0" />
+        </div>
+    </template>
+
+    <template id="report_barcode_labels">
+        <t t-foreach="docs" t-as="product">
+            <t t-call="dynamic_barcode_labels.dynamic_barcode_labels_layout">
+                    <!-- Product Logo -->
+                <div class="page" align="center">
+                    <t  t-if="config.image">
+	                    <div align="center" style="width: 30%;float: left;">
+	                        <img t-if="product[0].image" t-att-src="'data:image/png;base64,%s' %  to_text(product[0].image) " t-attf-style="width:#{config.image_width or '40px'};height:#{config.image_height or '20px'}" />
+	                    </div>
+	                    <div align="center" style="width: 70%;float: right;">
+                            <!-- Product Name -->
+	                        <div t-if="config.product_name" align="center"
+	                            t-attf-style="color:black;font-weight: bold;font-size:#{config.product_name_size or '7px'}">
+	                            <span t-field="product[0].name" />
+	                        </div>
+	    
+	                        <!-- Product Attributes -->
+	                        <div t-if="config.product_variant"
+	                            align="center" t-attf-style="color:black;font-weight: bold;font-size:#{config.product_variant_size or '7px'}">
+	                            <span
+	                                t-esc="', '.join(map(lambda x: x.name, product[0].attribute_value_ids))" />
+	                        </div>
+	    
+	                        <!-- Product Lot -->
+	                        <div t-if="config.lot" align="center"
+	                            style="color:black;font-size:10px;">
+	                            <span t-raw="product[1]" />
+	                        </div>
+	    
+	                        <!-- Product Default Code -->
+	                        <div t-if="config.product_code" align="center"
+	                            t-attf-style="color:black;font-weight: bold;font-size:#{config.product_code_size or '7px'}">
+	                            <span t-field="product[0].default_code" />
+	                        </div>
+	    
+	                        <!-- Barcode  -->
+	                        <t t-if="config.barcode">
+	                            <span
+	                                t-raw="get_barcode_string(product[0], data)" />
+	                            <!-- img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=%s' %(data['form']['barcode_type'], get_barcode_value(product[0], data), int(data['form']['display_width']), int(data['form']['display_height']), is_humanreadable(data))"/ -->
+	                        </t>
+	    
+	                        <!-- Product Barcode Number -->
+	                        <div t-if="config.product_barcode_no" align="center"
+	                            t-attf-style="color:black;font-size:#{config.product_barcode_no_size or '7px'}">
+	                            <span t-field="product[0].barcode" />
+	                        </div>
+	    
+	                        <!-- Price -->
+	                        <div t-if="config.price_display" align="center" t-attf-style="color:black;font-weight: bold;font-size:#{config.price_display_size or '14px'}">
+	                            <t
+	                                t-if="data['form']['currency_position'] == 'before'">
+	                                <t t-if="data['form'].get('symbol')">
+	                                    <span t-esc="data['form']['symbol']" />
+	                                </t>
+	                            </t>
+	                            
+	                            <span t-esc="('%.2f'% product[0].lst_price).replace('.', ',')" />
+	                            <t
+	                                t-if="data['form']['currency_position'] == 'after'">
+	                                <t t-if="data['form'].get('symbol')">
+	                                    <span t-esc="data['form']['symbol']" />
+	                                </t>
+	                            </t>
+	                        </div>
+
+                            <!-- Delivery Address -->
+                            <div t-if="config.delivery_address and product[2]" align="center"
+                                t-attf-style="color:black;font-size:#{config.delivery_address_size or '7px'}">
+                                <span t-field="product[3].partner_id"
+                                t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+                            </div>
+                            <!-- Text 1 -->
+                            <div t-if="config.text_1" align="center"
+                                t-attf-style="color:black;font-size:#{config.text_1_size or '7px'}">
+                                <span t-esc="config.text_1" />
+                            </div>
+                            <!-- Text 2 -->
+                            <div t-if="config.text_2" align="center"
+                                t-attf-style="color:black;font-size:#{config.text_2_size or '7px'}">
+                                <span t-esc="config.text_2" />
+                            </div>
+
+	                    </div>
+                    </t>
+                    <t  t-if="not config.image">
+	                    <!-- Product Name -->
+	                    <div t-if="config.product_name" align="center"
+	                        t-attf-style="color:black;font-weight: bold;font-size:#{config.product_name_size or '7px'}">
+	                        <span t-field="product[0].name" />
+	                    </div>
+	
+	                    <!-- Product Attributes -->
+	                    <div t-if="config.product_variant"
+	                        align="center" t-attf-style="color:black;font-weight: bold;font-size:#{config.product_variant_size or '7px'}">
+	                        <span
+	                            t-esc="', '.join(map(lambda x: x.name, product[0].attribute_value_ids))" />
+	                    </div>
+	
+	                    <!-- Product Lot -->
+	                    <div t-if="config.lot" align="center"
+	                        style="color:black;font-size:10px;">
+	                        <span t-raw="product[1]" />
+	                    </div>
+	
+	                    <!-- Product Default Code -->
+	                    <div t-if="config.product_code" align="center"
+	                        t-attf-style="color:black;font-weight: bold;font-size:#{config.product_code_size or '7px'}">
+	                        <span t-field="product[0].default_code" />
+	                    </div>
+	
+	                    <!-- Barcode  -->
+	                    <t t-if="config.barcode">
+	                        <span
+	                            t-raw="get_barcode_string(product[0], data)" />
+	                        <!-- img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=%s' %(data['form']['barcode_type'], get_barcode_value(product[0], data), int(data['form']['display_width']), int(data['form']['display_height']), is_humanreadable(data))"/ -->
+	                    </t>
+	
+	                    <!-- Product Barcode Number -->
+	                    <div t-if="config.product_barcode_no" align="center"
+	                        t-attf-style="color:black;font-size:#{config.product_barcode_no_size or '7px'}">
+	                        <span t-field="product[0].barcode" />
+	                    </div>
+	
+	                    <!-- Price -->
+	                    <div t-if="config.price_display" align="center" t-attf-style="color:black;font-weight: bold;font-size:#{config.price_display_size or '14px'}">
+	                        <t
+	                            t-if="data['form']['currency_position'] == 'before'">
+	                            <t t-if="data['form'].get('symbol')">
+	                                <span t-esc="data['form']['symbol']" />
+	                            </t>
+	                        </t>
+	                        
+	                        <span t-esc="('%.2f'% product[0].lst_price).replace('.', ',')" />
+	                        <t
+	                            t-if="data['form']['currency_position'] == 'after'">
+	                            <t t-if="data['form'].get('symbol')">
+	                                <span t-esc="data['form']['symbol']" />
+	                            </t>
+	                        </t>
+	                    </div>
+
+
+                        <!-- Delivery Address -->
+                        <div t-if="config.delivery_address and product[2]" align="center"
+                            t-attf-style="color:black;font-size:#{config.delivery_address_size or '7px'}">
+                            <span t-field="product[3].partner_id"
+                            t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+                        </div>
+                        <!-- Text 1 -->
+                        <div t-if="config.text_1" align="center"
+                            t-attf-style="color:black;font-size:#{config.text_1_size or '7px'}">
+                            <span t-esc="config.text_1" />
+                        </div>
+                        <!-- Text 2 -->
+                        <div t-if="config.text_2" align="center"
+                            t-attf-style="color:black;font-size:#{config.text_2_size or '7px'}">
+                            <span t-esc="config.text_2" />
+                        </div>
+	                </t>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

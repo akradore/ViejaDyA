@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<odoo>
+     <record id="view_multi_select_products_form" model="ir.ui.view">
+        <field name="name">multi.select.products.form</field>
+        <field name="model">product.multiselect</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Select Products">
+                <group>
+                    <field name="product_ids" nolabel="1"/>
+                </group>
+                <footer>
+                    <button name="set_products" string="Add" type="object" class="oe_highlight" />
+                    <button string="Cancel" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+     <record model="ir.actions.act_window" id="action_select_products">
+        <field name="name">Select Products</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.multiselect</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="act_product_select_view_form">
+        <field name="act_window_id" ref="action_select_products" />
+        <field name="sequence" eval="10" />
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_multi_select_products_form" />
+    </record>
+
+    <record id="view_select_products_form" model="ir.ui.view">
+        <field name="name">select.products.form</field>
+        <field name="model">select.products</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Select Products">
+                <group>
+                    <field name="product_ids" mode="tree" nolabel="1">
+                         <tree string="Sales Order Lines" editable="bottom">
+                            <field name="select_pid" invisible="1"/>
+                            <field name="product_id"/>
+                            <field name="qty"/>
+                         </tree>
+                    </field>
+                </group>
+                <footer>
+                    <button name="select_products" string="Add" type="object" class="oe_highlight" />
+                    <button string="Cancel" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>
